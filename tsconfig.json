@@ -1,0 +1,17 @@
+{
+    "include": ["src"],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "target": "es2019",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "declaration": true,
+        "declarationMap": true,
+        "incremental": true,
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "strict": true
+    }
+}
