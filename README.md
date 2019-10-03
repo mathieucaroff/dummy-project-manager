@@ -1,12 +1,21 @@
 # Project Manager
 
-The beginning of a project manager App, made in under 2h minutes. Mostly a dummy
-projet to test MobX.
+The beginning of a project manager App, made in under 5 hours.
 
 ## Install
 
-`yarn install`
+```sh
+yarn
+```
 
-## Run
+## Develop
 
-`yarn parcel src/page.html`
+```sh
+yarn parcel src/page.html
+```
+
+## Build
+
+```sh
+yarn parcel build src/page.html
+```
