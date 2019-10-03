@@ -1,23 +1,29 @@
 import * as React from 'react'
+import { createRef } from 'react'
 import { Project } from './model'
-import { TaskComp } from './Task'
-import { observer } from 'mobx-react'
+import { TaskComp, TaskHandlerObj } from './Task'
 import { ifEnter } from './util/ifEnter'
-import { select } from './util/select'
 
-export const ProjectComp = observer((prop: { project: Project }) => {
-   let { project } = prop
+export type ProjectProp = {
+   project: Project
+   taskHandling: (k: number) => TaskHandlerObj
+   handleNewTask: (s: string) => void
+}
+
+export const ProjectComp = (prop: ProjectProp) => {
+   let { project, taskHandling, handleNewTask } = prop
    let { name, taskList } = project
 
-   let handleNewTask = () => {}
+   type Ref = { current: HTMLInputElement }
+   let inputRef: Ref = createRef()
 
    return (
       <div className="project">
-         Project "{name}"
+         <h1>{name}</h1>
          <ol>
-            {taskList.map((task) => (
+            {taskList.map((task, k) => (
                <li key={task.name}>
-                  <TaskComp task={task}></TaskComp>
+                  <TaskComp task={task} handling={taskHandling(k)} />
                </li>
             ))}
          </ol>
@@ -26,10 +32,13 @@ export const ProjectComp = observer((prop: { project: Project }) => {
                New task
                <input
                   type="text"
-                  onKeyDown={ifEnter(select('value')(handleNewTask))}
+                  ref={inputRef}
+                  onKeyDown={ifEnter(() => {
+                     handleNewTask(inputRef.current.value)
+                  })}
                ></input>
             </label>
          </form>
       </div>
    )
-})
+}

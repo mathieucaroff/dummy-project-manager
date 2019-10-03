@@ -1,57 +1,79 @@
 import * as React from 'react'
+import { InputComp } from './components/InputComp'
 import { Task } from './model'
-import { select } from './util/select'
+import './task.css'
 import { ifEnter } from './util/ifEnter'
-import { observer } from 'mobx-react'
 
-export const TaskComp = observer((prop: { task: Task }) => {
-   let { task } = prop
+export interface TaskHandlerObj {
+   handleSetAssignee: (s: string) => void
+   handleSetStartDate: (s: string) => void
+   handleSetEndDate: (s: string) => void
+   handleDelete: () => void
+}
+
+export interface TaskProp {
+   task: Task
+   handling: TaskHandlerObj
+}
+
+export const TaskComp = (prop: TaskProp) => {
+   let { task, handling } = prop
    let { name, project, assignee, startDate, endDate, totalTimeInMs } = task
 
-   let handleAssignee = () => {}
-   let handleStartDate = () => {}
-   let handleEndDate = () => {}
-   let handleDelete = () => {}
+   let {
+      handleSetAssignee,
+      handleSetStartDate,
+      handleSetEndDate,
+      handleDelete,
+   } = handling
 
    return (
       <div className="task">
          <h3>{name}</h3>
          <ul>
             <li>Project: "{project.name}"</li>
-            {assignee && <li>Assignee: {assignee}</li>}
+            {assignee && <li>Assignee: {assignee.name}</li>}
             {startDate && <li>Start date: {startDate}</li>}
             {endDate && <li>End date: {endDate}</li>}
             {totalTimeInMs !== undefined && (
                <li>Total time (h) {Math.floor(totalTimeInMs / 1000 / 3600)}</li>
             )}
          </ul>
-         <form>
+
+         <form className="task-form">
             <label>
                Set Assignee
-               <input
+               <InputComp
                   type="text"
-                  onKeyDown={ifEnter(select('value')(handleAssignee))}
-               ></input>
+                  filter={ifEnter}
+                  handler={handleSetAssignee}
+               />
             </label>
             <label>
                Set Start Date
-               <input
-                  type="text"
-                  onKeyDown={ifEnter(select('value')(handleStartDate))}
-               ></input>
+               <InputComp
+                  type="date"
+                  text="Validate"
+                  handler={handleSetStartDate}
+               />
+            </label>
+            <label>
+               Set End Date
+               <InputComp
+                  type="date"
+                  text="Validate"
+                  handler={handleSetEndDate}
+               />
             </label>
             <label>
                Set End Date
                <input
-                  type="text"
-                  onKeyDown={ifEnter(select('value')(handleEndDate))}
-               ></input>
-            </label>
-            <label>
-               <input value="Delete task" type="button" onClick={handleDelete}></input>
+                  type="button"
+                  value="Delete Task"
+                  onClick={handleDelete}
+               />
             </label>
          </form>
       </div>
    )
-}
 }
