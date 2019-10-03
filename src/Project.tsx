@@ -29,10 +29,11 @@ export const ProjectComp = (prop: ProjectProp) => {
          </ol>
          <form>
             <label>
-               New task
+               Create new task
                <input
                   type="text"
                   ref={inputRef}
+                  style={{ marginLeft: '1em' }}
                   onKeyDown={ifEnter(() => {
                      handleNewTask(inputRef.current.value)
                   })}

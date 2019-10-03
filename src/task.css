@@ -3,10 +3,14 @@
 }
 
 .task-form {
-   color: #666;
+   color: #999;
    margin-left: 4em;
 }
 
 .task-form:hover {
    color: #000;
+}
+
+.task-form button:not(:hover) {
+   color: #888;
 }

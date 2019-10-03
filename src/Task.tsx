@@ -68,11 +68,7 @@ export const TaskComp = (prop: TaskProp) => {
                   handler={handleSetEndDate}
                />
             </label>
-            <input
-               type="button"
-               value="Delete Task"
-               onClick={() => handleDelete()}
-            />
+            <button onClick={() => handleDelete()}>Delete Task</button>
          </form>
       </div>
    )
