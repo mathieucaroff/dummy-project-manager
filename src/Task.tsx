@@ -28,8 +28,6 @@ export const TaskComp = (prop: TaskProp) => {
       handleDelete,
    } = handling
 
-   console.log({ task })
-
    return (
       <div className="task">
          <h3>{name}</h3>

@@ -43,7 +43,6 @@ const App = (defaultProject: Project) => () => {
    const [project, setProject] = useState(defaultProject)
 
    let update = () => {
-      console.log({ project })
       setProject({ ...project })
    }
 
@@ -54,8 +53,6 @@ const App = (defaultProject: Project) => () => {
    }
 
    let { taskList } = project
-
-   console.log('App():', { taskList })
 
    let taskHandling = (k: number): TaskHandlerObj => ({
       handleSetAssignee: (name: string) => {
@@ -69,7 +66,6 @@ const App = (defaultProject: Project) => () => {
       },
       handleSetStartDate: (d: string) => {
          let date = new Date(d)
-         console.log({ d, date })
          if (Number.isNaN(date.getTime())) {
             console.error('Invalid date submitted')
             return
@@ -82,7 +78,6 @@ const App = (defaultProject: Project) => () => {
       },
       handleSetEndDate: (d: string) => {
          let date = new Date(d)
-         console.log({ d, date })
          if (Number.isNaN(date.getTime())) {
             console.error('Invalid date submitted')
             return
@@ -95,7 +90,6 @@ const App = (defaultProject: Project) => () => {
       },
       handleDelete: () => {
          project.taskList.splice(k, 1)
-         console.log('handleDelete', { project })
          update()
       },
    })
