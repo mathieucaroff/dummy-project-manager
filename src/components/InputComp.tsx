@@ -12,6 +12,7 @@ export interface TextInputProp {
 export interface DateInputProp {
    type: 'date'
    text: string
+   filter: (cb: () => any) => (ev: KeyboardEvent) => any
    handler: (s: string) => any
 }
 
@@ -31,11 +32,17 @@ export const InputComp = (prop: InputProp) => {
          />
       )
    } else {
-      let { text, handler } = prop
+      let { text, filter, handler } = prop
       return (
          <span>
             <input type="date" ref={inputRef} />
-            <button onClick={handler}>{text}</button>
+            <button
+               onClick={filter(() => {
+                  handler(inputRef.current.value)
+               })}
+            >
+               {text}
+            </button>
          </span>
       )
    }

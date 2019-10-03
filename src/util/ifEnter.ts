@@ -1,6 +1,6 @@
-export const ifEnter = (callback) => (ev) => {
-   console.log({ ev })
+export const ifEnter = (callback: () => any) => (ev: Event) => {
    if (ev.key == 'Enter') {
       callback()
+      ev.preventDefault()
    }
 }

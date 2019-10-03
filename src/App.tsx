@@ -15,10 +15,17 @@ function main() {
    }
 
    createTask({ name: 'Write down the types', project: defaultProject })
-   let task = createTask({ name: 'Create the view', project: defaultProject })
-   task.assignee = {
+   let twiTask = createTask({
+      name: 'Create the view',
+      project: defaultProject,
+   })
+   twiTask.assignee = {
       name: 'Twi',
    }
+   twiTask.startDate = new Date()
+   twiTask.endDate = new Date(
+      twiTask.startDate.getTime() + 2 * 24 * 3600 * 1000,
+   )
 
    let ProjectApp = App(defaultProject)
 
@@ -54,9 +61,9 @@ const App = (defaultProject: Project) => () => {
          update()
       },
       handleSetStartDate: (d: string) => {
-         console.log({ d })
          let date = new Date(d)
-         if (date.getTime() === NaN) {
+         console.log({ d, date })
+         if (Number.isNaN(date.getTime())) {
             console.error('Invalid date submitted')
             return
          }
@@ -67,9 +74,9 @@ const App = (defaultProject: Project) => () => {
          update()
       },
       handleSetEndDate: (d: string) => {
-         console.log({ d })
          let date = new Date(d)
-         if (date.getTime() === NaN) {
+         console.log({ d, date })
+         if (Number.isNaN(date.getTime())) {
             console.error('Invalid date submitted')
             return
          }

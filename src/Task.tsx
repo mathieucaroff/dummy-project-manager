@@ -3,6 +3,7 @@ import { InputComp } from './components/InputComp'
 import { Task } from './model'
 import './task.css'
 import { ifEnter } from './util/ifEnter'
+import { preventDefault } from './util/preventDefault'
 
 export interface TaskHandlerObj {
    handleSetAssignee: (s: string) => void
@@ -18,7 +19,7 @@ export interface TaskProp {
 
 export const TaskComp = (prop: TaskProp) => {
    let { task, handling } = prop
-   let { name, project, assignee, startDate, endDate, totalTimeInMs } = task
+   let { name, project, assignee, startDate, endDate } = task
 
    let {
       handleSetAssignee,
@@ -27,16 +28,20 @@ export const TaskComp = (prop: TaskProp) => {
       handleDelete,
    } = handling
 
+   console.log({ task })
+
    return (
       <div className="task">
          <h3>{name}</h3>
          <ul>
             <li>Project: "{project.name}"</li>
             {assignee && <li>Assignee: {assignee.name}</li>}
-            {startDate && <li>Start date: {startDate}</li>}
-            {endDate && <li>End date: {endDate}</li>}
-            {totalTimeInMs !== undefined && (
-               <li>Total time (h) {Math.floor(totalTimeInMs / 1000 / 3600)}</li>
+            {startDate && <li>Start date: {startDate.toISOString()}</li>}
+            {endDate && <li>End date: {endDate.toISOString()}</li>}
+            {task.totalTimeInMs !== undefined && (
+               <li>
+                  Total time (h) {Math.floor(task.totalTimeInMs / 1000 / 3600)}
+               </li>
             )}
          </ul>
 
@@ -54,6 +59,7 @@ export const TaskComp = (prop: TaskProp) => {
                <InputComp
                   type="date"
                   text="Validate"
+                  filter={preventDefault}
                   handler={handleSetStartDate}
                />
             </label>
@@ -62,17 +68,15 @@ export const TaskComp = (prop: TaskProp) => {
                <InputComp
                   type="date"
                   text="Validate"
+                  filter={preventDefault}
                   handler={handleSetEndDate}
                />
             </label>
-            <label>
-               Set End Date
-               <input
-                  type="button"
-                  value="Delete Task"
-                  onClick={handleDelete}
-               />
-            </label>
+            <input
+               type="button"
+               value="Delete Task"
+               onClick={() => handleDelete()}
+            />
          </form>
       </div>
    )
