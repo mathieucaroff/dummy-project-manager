@@ -1,36 +1,32 @@
 export interface Project {
-   name: string
-   taskList: Task[]
+   readonly name: string
+   readonly taskList: Task[]
 }
 
 export interface Task {
-   name: string
-   project: Project
-   assignee?: Pony
-   startDate?: Date
-   endDate?: Date
+   readonly name: string
+   readonly project: Project
+   readonly assignee?: Pony
+   readonly startDate?: Date
+   readonly endDate?: Date
    readonly totalTimeInMs?: number
 }
 
 export interface Pony {
-   name: string
+   readonly name: string
 }
 
-export type CreateTaskProp = Pick<Task, 'name' | 'project'>
+export type CreateTaskProp = Task
 
-export let createTask = ({ name, project }: CreateTaskProp) => {
-   let task: Task = {
-      name,
-      project,
-      get totalTimeInMs() {
-         let { endDate: end, startDate: start } = this
-         if (end !== undefined && start !== undefined) {
-            return end.getTime() - start.getTime()
-         }
-         return undefined
-      },
+export let createTask = (prop: CreateTaskProp) => {
+   let { project, endDate: end, startDate: start } = prop
+
+   let totalTimeInMs
+   if (end !== undefined && start !== undefined) {
+      totalTimeInMs = end.getTime() - start.getTime()
    }
-   project.taskList.push(task)
+   let task: Task = { ...prop, totalTimeInMs }
+
    return task
 }
 
@@ -40,25 +36,32 @@ let project: Project = {
    taskList: [],
 }
 
-let task: Task = createTask({
-   name: 'Write down the types',
-   project,
-})
-
-console.assert(task.totalTimeInMs === undefined)
-
 let student: Pony = {
    name: 'Twilight SPARKLE',
 }
 
-task.assignee = student
+let task: Task = createTask({
+   name: 'Write down the types',
+   assignee: student,
+   project,
+})
 
-task.startDate = new Date()
+console.assert(task.totalTimeInMs === undefined, 'should be undefined first')
 
-console.assert(task.totalTimeInMs === undefined)
+let startDate = new Date()
+
+task = createTask({
+   ...task,
+   startDate,
+})
+
+console.assert(task.totalTimeInMs === undefined, 'should be undefined second')
 
 const hour = 3600 * 1000
 
-task.endDate = new Date(task.startDate.getTime() + 3 * hour)
+task = createTask({
+   ...task,
+   endDate: new Date(startDate.getTime() + 3 * hour),
+})
 
-console.assert(task.totalTimeInMs === 3 * hour)
+console.assert(task.totalTimeInMs === 3 * hour, 'should be 3 hours')

@@ -14,18 +14,24 @@ function main() {
       taskList: [],
    }
 
-   createTask({ name: 'Write down the types', project: defaultProject })
+   let task = createTask({
+      name: 'Write down the types',
+      project: defaultProject,
+   })
+   defaultProject.taskList.push(task)
+
+   let startDate = new Date()
+
    let twiTask = createTask({
       name: 'Create the view',
       project: defaultProject,
+      assignee: {
+         name: 'Twi',
+      },
+      startDate,
+      endDate: new Date(startDate.getTime() + 2 * 24 * 3600 * 1000),
    })
-   twiTask.assignee = {
-      name: 'Twi',
-   }
-   twiTask.startDate = new Date()
-   twiTask.endDate = new Date(
-      twiTask.startDate.getTime() + 2 * 24 * 3600 * 1000,
-   )
+   defaultProject.taskList.push(twiTask)
 
    let ProjectApp = App(defaultProject)
 
@@ -42,7 +48,8 @@ const App = (defaultProject: Project) => () => {
    }
 
    let handleNewTask = (name: string) => {
-      createTask({ name, project })
+      let task = createTask({ name, project })
+      project.taskList.push(task)
       update()
    }
 
@@ -52,12 +59,12 @@ const App = (defaultProject: Project) => () => {
 
    let taskHandling = (k: number): TaskHandlerObj => ({
       handleSetAssignee: (name: string) => {
-         taskList[k] = {
+         taskList[k] = createTask({
             ...taskList[k],
             assignee: {
                name,
             },
-         }
+         })
          update()
       },
       handleSetStartDate: (d: string) => {
@@ -67,10 +74,10 @@ const App = (defaultProject: Project) => () => {
             console.error('Invalid date submitted')
             return
          }
-         taskList[k] = {
+         taskList[k] = createTask({
             ...taskList[k],
             startDate: date,
-         }
+         })
          update()
       },
       handleSetEndDate: (d: string) => {
@@ -80,10 +87,10 @@ const App = (defaultProject: Project) => () => {
             console.error('Invalid date submitted')
             return
          }
-         taskList[k] = {
+         taskList[k] = createTask({
             ...taskList[k],
             endDate: date,
-         }
+         })
          update()
       },
       handleDelete: () => {

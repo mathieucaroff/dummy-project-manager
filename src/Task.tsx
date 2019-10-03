@@ -19,7 +19,7 @@ export interface TaskProp {
 
 export const TaskComp = (prop: TaskProp) => {
    let { task, handling } = prop
-   let { name, project, assignee, startDate, endDate } = task
+   let { name, project, assignee, startDate, endDate, totalTimeInMs } = task
 
    let {
       handleSetAssignee,
@@ -38,10 +38,8 @@ export const TaskComp = (prop: TaskProp) => {
             {assignee && <li>Assignee: {assignee.name}</li>}
             {startDate && <li>Start date: {startDate.toISOString()}</li>}
             {endDate && <li>End date: {endDate.toISOString()}</li>}
-            {task.totalTimeInMs !== undefined && (
-               <li>
-                  Total time (h) {Math.floor(task.totalTimeInMs / 1000 / 3600)}
-               </li>
+            {totalTimeInMs !== undefined && (
+               <li>Total time (h) {Math.floor(totalTimeInMs / 1000 / 3600)}</li>
             )}
          </ul>
 
